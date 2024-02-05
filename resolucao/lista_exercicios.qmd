@@ -1,0 +1,457 @@
+---
+title: "Lista Exercícios"
+author: "Vinicius Oike"
+format:
+  html:
+    theme: flatly
+    toc: true
+    self-contained: true
+editor: visual
+---
+
+# Curso de Verão Torch
+
+```{r}
+#| include: false
+library(torch)
+library(zeallot)
+library(luz)
+library(torchvision)
+```
+
+# Lista 1
+
+### 1 Dimensões
+
+```{r}
+# Exercício 1: Explorando Dimensões de Tensores
+# Considere um tensor criado com torch_tensor(1:12).
+# Qual seria a dimensão desse tensor?
+
+t0 <- torch_tensor(1:12)
+#> Dimensão 1
+t0
+t0$dim()
+```
+
+### 2 Operações básicas
+
+```{r}
+# Exercício 2: Operações Básicas
+# Dados dois tensores A e B, ambos com valores torch_tensor(1:4),
+# qual seria o resultado de A * B?
+
+A <- torch_tensor(1:4)
+B <- torch_tensor(1:4)
+
+A * B
+
+A$multiply(B)
+```
+
+### 3 Redimensionamento
+
+```{r}
+# Exercício 3: Desafio de Redimensionamento
+# Se você tiver um tensor de 12 elementos,
+# quais dimensões você poderia usar para redimensioná-lo em
+# uma matriz 2D sem causar erro? Mostre como você faria isso.
+
+t0 <- torch_tensor(1:12)
+
+t0$view(c(3, 4))
+t0$view(c(4, 3))
+t0$view(c(6, 2))
+t0$view(c(2, 6))
+t0$view(c(1, 12))
+
+# Também é possível adicionar um número arbitrário de dimensões "redundantes"
+t0$unsqueeze(1)
+t0$view(c(1, 1, 1, 1, 1, 1, 1, 1, 12, 1))
+```
+
+### 4 Slicing
+
+```{r}
+# Exercício 4: Slicing Avançado
+# Considere um tensor 3D com dimensões (4, 4, 4).
+# Como você acessaria apenas a segunda e terceira coluna da segunda "página"?
+# Experimente várias formas de fazer isso.
+
+t0 <- torch_randn(c(4, 4, 4))
+
+t0[2, .., 2:3]
+t0[2, .., c(2, 3)]
+```
+
+### 5 Broadcasting
+
+```{r}
+# Exercício 5: Broadcasting
+# Dados tensor_a5 de dimensão (3, 2) e tensor_b5 de dimensão (2,),
+# qual seria o resultado de tensor_a5 + tensor_b5? E se tentássemos somar
+# tensor_a5 com um tensor de dimensão (3,), isso causaria um erro?
+
+tensor_a5 <- torch_randn(c(3, 2))
+tensor_b5 <- torch_ones(c(2, 1))
+
+```
+
+```{r}
+#| eval: false
+
+#> Não funciona pois a dimensão do tensor a (3) não bate com a dimensão do tensor b (2)
+tensor_a5 + tensor_b5
+```
+
+```{r}
+#> Agora a soma funciona via broadcasting
+tz <- torch_randn(3, 1)
+tensor_a5 + tz
+
+#> Assim também funciona, mas qualquer outro valor resulta em erro.
+tz <- torch_randn(3, 2)
+tensor_a5 + tz
+```
+
+### 6 Operações com matrizes
+
+```{r}
+# Exercício 6: Interpretando Resultados de Operações Matriciais
+# Se você multiplicar um tensor A (dimensão 2x3) por um tensor B (dimensão 3x2),
+# qual será a dimensão do resultado? Qual seria a dimensão se você transpuser
+# o resultado?
+
+# O resultado da multiplicação de matrizes será 2x2
+A <- torch_randn(c(2, 3))
+B <- torch_randn(c(3, 2))
+
+A$mm(B)
+```
+
+### 7 Datasets
+
+```{r}
+# Exercício 7: Manipulação de Datasets com Tensores
+# Após converter o dataset 'mtcars' para um tensor, que passos você
+# tomaria para calcular a média da primeira coluna (mpg)? Escreva o código.
+
+# Calcula a média apenas da coluna mtcars
+t0[, 1]$mean()
+t0[, grep("mpg", names(mtcars))]$mean()
+# Calcula a média de todas as colunas
+t0$mean(dim = 1)
+
+mean(mtcars$mpg)
+```
+
+### 8 Decomposição de matrizes
+
+```{r}
+# Exercício 8: Predição de Decomposição de Matrizes
+# Ao realizar uma decomposição QR em um tensor quadrado 4x4,
+# quantas matrizes e de quais dimensões você espera receber?
+
+t0 <- torch_randn(c(4, 4))
+#> Espera-se ter duas matrizes 4x4.
+#> Uma matriz Q ortonormal e uma matriz R triangular superior.
+linalg_qr(t0)
+```
+
+### 9 Desafio Prático - Regressão Linear
+
+Obs: ver [capítulo 24 Deep Learning](https://skeydan.github.io/Deep-Learning-and-Scientific-Computing-with-R-torch/matrix_computations_leastsquares.html). Há diversas formas alternativas de resolver o problema de mínimos quadrados. A partir da forma matricial da equação de regressão linear:
+
+$$
+y = X\beta + \epsilon
+$$
+
+temos o problema de escolher $\beta$ para minimizar:
+
+$$
+\epsilon^\top\epsilon = (y - X\beta)^\top(y - X\beta)
+$$Encontrando o gradiente da função
+
+$$
+\nabla_{\beta} = -2X^\top y + 2X^\top X\beta
+$$
+
+Igualando a expressão a zero,
+
+$$
+\begin{align}
+-2X^\top y + 2X^\top X\beta & = 0 \\
+X^\top X\beta & = X^\top y \\
+\beta & = (X^\top X)^{-1} X^\top y
+\end{align}
+$$
+
+Se $(X^\top X)^{-1}$ existir (o que é garantido pela posto completo de $X$ ). Ignora-se a análise das condições de suficiência de mínimo; contudo, vale lembrar que a função MSE é quadrática e, logo, convexa, o que - na maior parte dos casos - garante a existência de um mínimo global.
+
+O sistema de equações acima pode ser um pouco difícil do ponto de vista computacional. Em especial, é difícil calcular inversas de matrizes muito grandes e também há problemas de perda de precisão numérica nestes casos. Assim, há uma série de estratégias para decompor estas matrizes em matrizes mais simples. Em geral, tenta-se fatorar a matriz em matrizes triangulares ou matrizes que tenham propriedades que simplifiquem o cálculo da inversa. Matrizes ortonormais, por exemplo, tem a boa propriedade que a sua transposta é igual a sua inversa.
+
+```{r}
+# Exercício 9: Desafio Prático - Regressão Linear
+# Dado o dataset 'cars', com duas colunas (x e y), como você utilizaria
+# tensores para calcular os coeficientes de uma regressão linear de y em x?
+# Dica: Considere a fórmula da regressão linear (β = (X'X)^-1 X'y).
+# Calcule todas as formas que você conhece para fazer isso e
+# compare os resultados.
+```
+
+```{r}
+# Monta as matrizes
+X <- cbind(1, cars$speed)
+Y <- matrix(cars$dist, ncol = 1)
+
+# Método usando matrizes
+solve(t(X) %*% X) %*% t(X) %*% Y
+
+#> Converte para tensors a aplica as operações manualmente
+x <- torch_tensor(X)
+y <- torch_tensor(Y)
+
+xtx <- x$t()$mm(x)
+xty <- x$t()$mm(y)
+#> Resultado final
+linalg_inv(xtx)$mm(xty)
+
+#> Usando a função lstsq
+linalg_lstsq(x, y)
+```
+
+```{r}
+#> Decomposição QR
+
+## Lembrando que, a decomposição QR é tal que X = QR
+## Ax = b
+## QRx = b
+## Rx = Q^-1b
+## Rx = Qtb
+
+library(zeallot)
+
+c(Q, R) %<-% linalg_qr(x)
+Qtb <- Q$t()$mm(y)
+
+torch_triangular_solve(Qtb, R)
+```
+
+# Lista 2
+
+### 1 Regressão Linear
+
+```{r}
+# Exercício Teórico 1: Entendimento da Regressão Linear
+# Explique, com suas próprias palavras, o que a equação
+# y = β0 + β1 * x + ε representa no contexto da regressão linear.
+```
+
+A equação define uma reta com intercepto $\beta_{0}$ e coeficiente de inclinação $\beta_{1}$.O termo ε é um erro ou ruído. Na regressão linear, tenta-se encontrar a reta que melhor se ajusta aos dados, no sentido de ter a menor distância aos pontos. Formalmente, minimiza-se a soma da distância quadrática (ou mean squared error).
+
+$$
+\text{min } \epsilon = y_{i} - \hat{y_{i}} = y_{i} - \beta_{0} - \beta_{1}x_{i}
+$$
+
+### 2 Função de Perda e Verossimilhança
+
+```{r}
+# Exercício Teórico 2: Função de Perda e Verossimilhança
+# Pergunta: Descreva a relação entre a função de perda do erro quadrático médio (MSE)
+# e a verossimilhança na regressão linear.
+# Por que minimizar o MSE é equivalente a maximizar a verossimilhança?
+```
+
+Por definição, a função de perda do erro quadrático é dada por:
+
+$$
+f(\beta) = \frac{1}{n}\sum_{i = 1}^{n}(y_{i} - \hat{y_{i}})^{2} = \frac{1}{n}\sum_{i = 1}^{n}(y_{i} - \beta_{0} - \beta_{1}x_{i})^{2}
+$$
+
+Escolhe-se $\beta_{0}$ e $\beta_{1}$ que minimizam a função acima. Sabemos que isto é feito tomando o gradiente da função $f$ e igualando a zero. Assim, temos duas equações:
+
+$$
+\begin{align}
+\frac{\partial f}{\partial \beta_{0}} & = -\frac{2}{n}\sum_{i = 1}^{n}(y_{i} - \beta_{0} - \beta_{1}x_{i}) = 0\\
+\frac{\partial f}{\partial \beta_{1}} & = -\frac{2}{n}\sum_{i = 1}^{n}(y_{i} - \beta_{0} - \beta_{1}x_{i})x_{i} = 0\\
+\end{align}
+$$
+
+Resolvendo-se as duas equações, pode-se chegar numa solução analítica para este problema. Por outro lado, pode-se resolver o problema de mínimos quadrados via máxima verossimilhança. Seja o modelo linear
+
+$$
+y_{i} = \beta_{0} + \beta_{1}x_{i} + \epsilon_{i}
+$$
+
+onde $\epsilon_{i} \sim N(0, \sigma^{2})$ é i.i.d. e $i = 1, \dots , n$. Pode-se escrever a função de verossimilhança da expressão acima, usando a distribuição normal, como a função de distribuição de probabilidade conjunta das n normais. Como assume-se independência, a distribuição conjunta pode ser simplificada para o produtório das distribuições individuais:
+
+$$
+P(\theta) = \prod_{i = 1}^{n}f(p_{i}|\theta)
+$$
+
+onde $\theta = (\beta_{0}, \beta_{1}, \sigma)$. Assim, temos que:
+
+$$
+\begin{align}
+P(\theta) & = \prod_{i = 1}^{n}f(p_{i}|\theta) \\
+          & = \prod_{i = 1}^{n}\frac{1}{\sqrt{2\pi \sigma^{2}}} \text{exp}(-\frac{(y_{i} - \beta_{0} - \beta_{1}x_{i})^{2}}{2\sigma^{2}})
+\end{align}
+$$
+
+Agora, temos o problema de encontrar os valores de $\theta$ que maximizam a expressão acima. Como a transformação log é crescente, ela não altera o ponto crítico da função acima. Aplicando, log,
+
+$$
+\text{ln}P(\theta) = L (\theta) = -\frac{n}{2}\text{ln}(2\pi) - n\text{ln}(\sigma) - \frac{1}{2\sigma^{2}}\sum_{i = 1}^{n}(y_{i} - \beta_{0} - \beta_{1}x_{i})^{2}
+$$
+
+Note que a última expressão é equivalente à função de erro quadrático exibida anteriormente,
+
+$$
+L (\theta) = -\frac{n}{2}\text{ln}(2\pi) - n\text{ln}(\sigma) - \frac{n}{2\sigma^{2}}\text{MSE}
+$$
+
+No contexto da otimização de $\beta_{0}$ e $\beta_{1}$ os valores de $n$ e $\sigma^2$ são dados. Assim o problema de minimização de MSE é equivalente ao problema de maximização da log-verossimilhança.
+
+Novamente, derivando em relação a $\beta_{0}$ e $\beta_{1}$ temos que:
+
+$$
+\begin{align}
+\frac{\partial f}{\partial \beta_{0}} & = \frac{1}{\sigma^{2}}\sum_{i = 1}^{n}(y_{i} - \beta_{0} - \beta_{1}x_{i}) = 0\\
+\frac{\partial f}{\partial \beta_{1}} & = \frac{1}{\sigma^{2}}\sum_{i = 1}^{n}(y_{i} - \beta_{0} - \beta_{1}x_{i})x_{i} = 0\\
+\end{align}
+$$
+
+que deve chegar na mesma solução analítica.
+
+### 3 Gradientes
+
+```{r}
+# Exercício Prático 3: Cálculo de Gradientes
+library(torch)
+
+t1 <- torch_tensor(10, requires_grad = TRUE)
+# Realize algumas operações com t1, diferentes das vistas em aula. Exemplo:
+
+t2 <- t1 + 2 # mude isso
+t3 <- t2$square() # e isso
+
+# Agora calcule o gradiente
+t3$backward()
+print(t1$grad)
+
+
+#> Cobb-Douglas f(x, y) = x^(1/2) + y^(1/2)
+
+x <- torch_tensor(1, requires_grad = TRUE)
+y <- torch_tensor(1, requires_grad = TRUE)
+
+t1 <- x$square()
+t2 <- y$square()
+
+t3 <- t1 + t2
+t3$backward()
+
+print(x$grad)
+print(y$grad)
+```
+
+### 4 Derivação do Gradiente
+
+```{r}
+# Exercício Teórico 4: Derivação do Gradiente
+# Obtenha o gradiente da função de perda MSE em relação a β0 e β1.
+# Como isso se relaciona com a atualização dos parâmetros na descida de gradiente?
+```
+
+Por definição, a função de perda do erro quadrático é dada por:
+
+$$
+f(\beta) = \frac{1}{n}\sum_{i = 1}^{n}(y_{i} - \hat{y_{i}})^{2} = \frac{1}{n}\sum_{i = 1}^{n}(y_{i} - \beta_{0} - \beta_{1}x_{i})^{2}
+$$
+
+Escolhe-se $\beta_{0}$ e $\beta_{1}$ que minimizam a função acima. Sabemos que isto é feito tomando o gradiente da função $f$ e igualando a zero. Assim, temos duas equações:
+
+$$
+\begin{align}
+\frac{\partial f}{\partial \beta_{0}} & = -\frac{2}{n}\sum_{i = 1}^{n}(y_{i} - \beta_{0} - \beta_{1}x_{i}) = 0\\
+\frac{\partial f}{\partial \beta_{1}} & = -\frac{2}{n}\sum_{i = 1}^{n}(y_{i} - \beta_{0} - \beta_{1}x_{i})x_{i} = 0\\
+\end{align}
+$$
+
+O gradiente da função é
+
+$$
+\nabla_{\beta} = (\frac{\partial f}{\partial \beta_{0}}, \frac{\partial f}{\partial \beta_{1}})
+$$
+
+e indica a direção de maior crescimento da função. O algoritmo de descida de gradiente utiliza esta informação para encontrar a direção onde a função decai mais rapidamente. O valor dos parâmetros é atualizado a cada iteração da seguinte forma:
+
+$$
+\beta^{t+1} = \beta_{t} - \alpha \nabla_{\beta}
+$$
+
+onde $\alpha$ é uma constante pequena (em geral, 0.001) chamada "learning rate" e $\beta^{0}$ inicial é sempre dado. Em geral, escolhe-se um valor aleatório entre 0 e 1, a partir da distribuição uniforme.
+
+### 5 Regressão Linear com Autograd
+
+```{r}
+# Exercício Prático 5: Implementação da Regressão Linear com Autograd
+# Use o dataset 'mtcars' para implementar uma regressão linear múltipla
+# usando descida de gradiente com autograd.
+```
+
+```{r}
+dat <- mtcars |>
+  select(mpg, wt, qsec, am) |>
+  mutate(across(everything(), ~as.numeric(scale(.x))))
+
+#> Resultado da regressão via função lm()
+summary(model_lm <- lm(mpg ~ wt + qsec + am, data = dat))
+
+# Implemente a regressão linear e compare com a solução analítica.
+
+y <- dat$mpg
+X <- dat[, c("wt", "qsec", "am")]
+X <- as.matrix(cbind(1, X))
+
+y <- torch_tensor(y)
+X <- torch_tensor(X)
+
+#> Modelo linear simples
+model_lm <- function(X, beta) {
+  X$matmul(beta)
+}
+#> Função de perda
+mse <- function(beta) {
+  resid <- X$matmul(beta) - y
+  loss <- resid$square()$mean()
+  return(loss)
+}
+
+## parâmetros da otimização
+num_iterations <- 10000
+lr <- 0.001 # learning rate, alpha
+
+## parâmetros do modelo
+beta <- torch_rand(ncol(dat), requires_grad = TRUE)
+
+#> Calcula para um caso simples
+
+vl_loss <- mse(beta)
+
+vl_loss$backward()
+
+beta$grad
+
+beta$sub_(lr * beta$grad)
+#> Substitui por zero
+beta$grad$zero_()
+```
+
+# Lista 3
+
+# Lista 4
+
+# Lista 5
+
+## 
