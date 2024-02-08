@@ -3153,8 +3153,15 @@ return!"\t\n\x0B\f\r                　\u2028\u2029
   <ul class="collapse">
   <li><a href="#regressão-linear" id="toc-regressão-linear" class="nav-link" data-scroll-target="#regressão-linear">1 Regressão Linear</a></li>
   <li><a href="#função-de-perda-e-verossimilhança" id="toc-função-de-perda-e-verossimilhança" class="nav-link" data-scroll-target="#função-de-perda-e-verossimilhança">2 Função de Perda e Verossimilhança</a></li>
+  <li><a href="#gradientes" id="toc-gradientes" class="nav-link" data-scroll-target="#gradientes">3 Gradientes</a></li>
+  <li><a href="#derivação-do-gradiente" id="toc-derivação-do-gradiente" class="nav-link" data-scroll-target="#derivação-do-gradiente">4 Derivação do Gradiente</a></li>
+  <li><a href="#regressão-linear-com-autograd" id="toc-regressão-linear-com-autograd" class="nav-link" data-scroll-target="#regressão-linear-com-autograd">5 Regressão Linear com Autograd</a></li>
+  <li><a href="#compreensão-de-otimizadores" id="toc-compreensão-de-otimizadores" class="nav-link" data-scroll-target="#compreensão-de-otimizadores">7 Compreensão de Otimizadores</a></li>
   </ul></li>
-  <li><a href="#lista-3" id="toc-lista-3" class="nav-link" data-scroll-target="#lista-3">Lista 3</a></li>
+  <li><a href="#lista-3" id="toc-lista-3" class="nav-link" data-scroll-target="#lista-3">Lista 3</a>
+  <ul class="collapse">
+  <li><a href="#criação-de-dataset-e-dataloader" id="toc-criação-de-dataset-e-dataloader" class="nav-link" data-scroll-target="#criação-de-dataset-e-dataloader">1 Criação de Dataset e DataLoader</a></li>
+  </ul></li>
   <li><a href="#lista-4" id="toc-lista-4" class="nav-link" data-scroll-target="#lista-4">Lista 4</a></li>
   <li><a href="#lista-5" id="toc-lista-5" class="nav-link" data-scroll-target="#lista-5">Lista 5</a>
   <ul class="collapse">
@@ -3346,19 +3353,19 @@ return!"\t\n\x0B\f\r                　\u2028\u2029
 <span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>t0[<span class="dv">2</span>, .., <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>torch_tensor
- 0.0515  1.0454
- 0.5819  0.2392
--0.5232  1.2450
--1.7881 -0.6672
+ 0.0548  1.0943
+-0.1767  0.8083
+ 0.5781 -1.2563
+-0.8327 -0.9034
 [ CPUFloatType{4,2} ]</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>t0[<span class="dv">2</span>, .., <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>torch_tensor
- 0.0515  1.0454
- 0.5819  0.2392
--0.5232  1.2450
--1.7881 -0.6672
+ 0.0548  1.0943
+-0.1767  0.8083
+ 0.5781 -1.2563
+-0.8327 -0.9034
 [ CPUFloatType{4,2} ]</code></pre>
 </div>
 </div>
@@ -3384,9 +3391,9 @@ return!"\t\n\x0B\f\r                　\u2028\u2029
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>tensor_a5 <span class="sc">+</span> tz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>torch_tensor
--0.5913 -1.2947
- 0.8526 -1.1989
--0.5303  1.2831
+-0.3199  1.0196
+ 2.8247  1.4935
+-0.5141  0.2971
 [ CPUFloatType{3,2} ]</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Assim também funciona, mas qualquer outro valor resulta em erro.</span></span>
@@ -3394,9 +3401,9 @@ return!"\t\n\x0B\f\r                　\u2028\u2029
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>tensor_a5 <span class="sc">+</span> tz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>torch_tensor
--0.1843 -1.6812
- 2.5630 -1.1764
- 0.4809  1.0233
+-2.6565  0.5327
+ 2.2829 -0.8452
+-0.4355 -0.7228
 [ CPUFloatType{3,2} ]</code></pre>
 </div>
 </div>
@@ -3416,8 +3423,8 @@ return!"\t\n\x0B\f\r                　\u2028\u2029
 <span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>A<span class="sc">$</span><span class="fu">mm</span>(B)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>torch_tensor
--1.1141 -0.0681
--1.5240  0.0543
+-0.1786  1.1222
+ 0.3619  1.4333
 [ CPUFloatType{2,2} ]</code></pre>
 </div>
 </div>
@@ -3433,23 +3440,23 @@ return!"\t\n\x0B\f\r                　\u2028\u2029
 <span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>t0[, <span class="dv">1</span>]<span class="sc">$</span><span class="fu">mean</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>torch_tensor
-0.434632
+0.189629
 [ CPUFloatType{} ]</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>t0[, <span class="fu">grep</span>(<span class="st">&quot;mpg&quot;</span>, <span class="fu">names</span>(mtcars))]<span class="sc">$</span><span class="fu">mean</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>torch_tensor
-0.434632
+0.189629
 [ CPUFloatType{} ]</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcula a média de todas as colunas</span></span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>t0<span class="sc">$</span><span class="fu">mean</span>(<span class="at">dim =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>torch_tensor
- 0.7973  0.6256  0.4876 -0.1719
--0.4731 -0.4067  0.1408 -0.1528
- 0.5774  0.1218 -0.0187 -0.9926
--0.0954 -0.8421 -0.3734 -0.7581
+-0.2812  1.0044  0.0418 -0.0064
+ 1.0914 -0.1286  0.3992  0.2943
+ 0.4489  0.2921 -0.2765 -0.1591
+-0.6008  0.4319 -0.1791 -0.0024
 [ CPUFloatType{4,4} ]</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(mtcars<span class="sc">$</span>mpg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -3472,18 +3479,18 @@ return!"\t\n\x0B\f\r                　\u2028\u2029
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
 torch_tensor
--0.1499  0.6207 -0.5165  0.5705
--0.0728 -0.4721  0.3459  0.8076
- 0.8859 -0.2201 -0.3907  0.1185
- 0.4328  0.5860  0.6790  0.0908
+-0.1569 -0.6782  0.7000  0.1596
+-0.0417 -0.0663 -0.2911  0.9535
+ 0.3287 -0.7190 -0.5748 -0.2111
+-0.9304 -0.1367 -0.3081 -0.1443
 [ CPUFloatType{4,4} ]
 
 [[2]]
 torch_tensor
--1.9518  0.4508  0.9600  0.3023
- 0.0000 -2.3590 -0.6170  0.7627
- 0.0000  0.0000 -0.1232  0.5828
- 0.0000  0.0000  0.0000 -0.5405
+ 0.6462 -1.1610 -1.4874 -1.5488
+ 0.0000 -1.6517  0.4483 -1.0698
+ 0.0000  0.0000  1.7020  0.9543
+ 0.0000  0.0000  0.0000  1.1050
 [ CPUFloatType{4,4} ]</code></pre>
 </div>
 </div>
@@ -3665,9 +3672,204 @@ L (\theta) = -\frac{n}{2}\text{ln}(2\pi) - n\text{ln}(\sigma) - \frac{n}{2\sigma
 \]</span></p>
 <p>que deve chegar na mesma solução analítica.</p>
 </section>
+<section id="gradientes" class="level3">
+<h3 class="anchored" data-anchor-id="gradientes">3 Gradientes</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Exercício Prático 3: Cálculo de Gradientes</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(torch)</span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>t1 <span class="ot">&lt;-</span> <span class="fu">torch_tensor</span>(<span class="dv">10</span>, <span class="at">requires_grad =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Realize algumas operações com t1, diferentes das vistas em aula. Exemplo:</span></span>
+<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a>t2 <span class="ot">&lt;-</span> t1 <span class="sc">+</span> <span class="dv">2</span> <span class="co"># mude isso</span></span>
+<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a>t3 <span class="ot">&lt;-</span> t2<span class="sc">$</span><span class="fu">square</span>() <span class="co"># e isso</span></span>
+<span id="cb56-9"><a href="#cb56-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-10"><a href="#cb56-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Agora calcule o gradiente</span></span>
+<span id="cb56-11"><a href="#cb56-11" aria-hidden="true" tabindex="-1"></a>t3<span class="sc">$</span><span class="fu">backward</span>()</span>
+<span id="cb56-12"><a href="#cb56-12" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(t1<span class="sc">$</span>grad)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>torch_tensor
+ 24
+[ CPUFloatType{1} ]</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Cobb-Douglas f(x, y) = x^(1/2) + y^(1/2)</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">torch_tensor</span>(<span class="dv">1</span>, <span class="at">requires_grad =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">torch_tensor</span>(<span class="dv">1</span>, <span class="at">requires_grad =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a>t1 <span class="ot">&lt;-</span> x<span class="sc">$</span><span class="fu">square</span>()</span>
+<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a>t2 <span class="ot">&lt;-</span> y<span class="sc">$</span><span class="fu">square</span>()</span>
+<span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-9"><a href="#cb58-9" aria-hidden="true" tabindex="-1"></a>t3 <span class="ot">&lt;-</span> t1 <span class="sc">+</span> t2</span>
+<span id="cb58-10"><a href="#cb58-10" aria-hidden="true" tabindex="-1"></a>t3<span class="sc">$</span><span class="fu">backward</span>()</span>
+<span id="cb58-11"><a href="#cb58-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-12"><a href="#cb58-12" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(x<span class="sc">$</span>grad)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>torch_tensor
+ 2
+[ CPUFloatType{1} ]</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(y<span class="sc">$</span>grad)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>torch_tensor
+ 2
+[ CPUFloatType{1} ]</code></pre>
+</div>
+</div>
+</section>
+<section id="derivação-do-gradiente" class="level3">
+<h3 class="anchored" data-anchor-id="derivação-do-gradiente">4 Derivação do Gradiente</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Exercício Teórico 4: Derivação do Gradiente</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtenha o gradiente da função de perda MSE em relação a β0 e β1.</span></span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Como isso se relaciona com a atualização dos parâmetros na descida de gradiente?</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Por definição, a função de perda do erro quadrático é dada por:</p>
+<p><span class="math display">\[
+f(\beta) = \frac{1}{n}\sum_{i = 1}^{n}(y_{i} - \hat{y_{i}})^{2} = \frac{1}{n}\sum_{i = 1}^{n}(y_{i} - \beta_{0} - \beta_{1}x_{i})^{2}
+\]</span></p>
+<p>Escolhe-se <span class="math inline">\(\beta_{0}\)</span> e <span class="math inline">\(\beta_{1}\)</span> que minimizam a função acima. Sabemos que isto é feito tomando o gradiente da função <span class="math inline">\(f\)</span> e igualando a zero. Assim, temos duas equações:</p>
+<p><span class="math display">\[
+\begin{align}
+\frac{\partial f}{\partial \beta_{0}} &amp; = -\frac{2}{n}\sum_{i = 1}^{n}(y_{i} - \beta_{0} - \beta_{1}x_{i}) = 0\\
+\frac{\partial f}{\partial \beta_{1}} &amp; = -\frac{2}{n}\sum_{i = 1}^{n}(y_{i} - \beta_{0} - \beta_{1}x_{i})x_{i} = 0\\
+\end{align}
+\]</span></p>
+<p>O gradiente da função é</p>
+<p><span class="math display">\[
+\nabla_{\beta} = (\frac{\partial f}{\partial \beta_{0}}, \frac{\partial f}{\partial \beta_{1}})
+\]</span></p>
+<p>e indica a direção de maior crescimento da função. O algoritmo de descida de gradiente utiliza esta informação para encontrar a direção onde a função decai mais rapidamente. O valor dos parâmetros é atualizado a cada iteração da seguinte forma:</p>
+<p><span class="math display">\[
+\beta^{t+1} = \beta_{t} - \alpha \nabla_{\beta}
+\]</span></p>
+<p>onde <span class="math inline">\(\alpha\)</span> é uma constante pequena (em geral, 0.001) chamada “learning rate” e <span class="math inline">\(\beta^{0}\)</span> inicial é sempre dado. Em geral, escolhe-se um valor aleatório entre 0 e 1, a partir da distribuição uniforme.</p>
+</section>
+<section id="regressão-linear-com-autograd" class="level3">
+<h3 class="anchored" data-anchor-id="regressão-linear-com-autograd">5 Regressão Linear com Autograd</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Exercício Prático 5: Implementação da Regressão Linear com Autograd</span></span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Use o dataset &#39;mtcars&#39; para implementar uma regressão linear múltipla</span></span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a><span class="co"># usando descida de gradiente com autograd.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> mtcars <span class="sc">|&gt;</span></span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(mpg, wt, qsec, am) <span class="sc">|&gt;</span></span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span><span class="fu">as.numeric</span>(<span class="fu">scale</span>(.x))))</span>
+<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-5"><a href="#cb64-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Resultado da regressão via função lm()</span></span>
+<span id="cb64-6"><a href="#cb64-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> wt <span class="sc">+</span> qsec <span class="sc">+</span> am, <span class="at">data =</span> dat))</span>
+<span id="cb64-7"><a href="#cb64-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-8"><a href="#cb64-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Implemente a regressão linear e compare com a solução analítica.</span></span>
+<span id="cb64-9"><a href="#cb64-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-10"><a href="#cb64-10" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> dat<span class="sc">$</span>mpg</span>
+<span id="cb64-11"><a href="#cb64-11" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> dat[, <span class="fu">c</span>(<span class="st">&quot;wt&quot;</span>, <span class="st">&quot;qsec&quot;</span>, <span class="st">&quot;am&quot;</span>)]</span>
+<span id="cb64-12"><a href="#cb64-12" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">cbind</span>(<span class="dv">1</span>, X))</span>
+<span id="cb64-13"><a href="#cb64-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-14"><a href="#cb64-14" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">torch_tensor</span>(y)</span>
+<span id="cb64-15"><a href="#cb64-15" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">torch_tensor</span>(X)</span>
+<span id="cb64-16"><a href="#cb64-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-17"><a href="#cb64-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modelo linear simples</span></span>
+<span id="cb64-18"><a href="#cb64-18" aria-hidden="true" tabindex="-1"></a>model_lm <span class="ot">&lt;-</span> <span class="cf">function</span>(X, beta) {</span>
+<span id="cb64-19"><a href="#cb64-19" aria-hidden="true" tabindex="-1"></a>  X<span class="sc">$</span><span class="fu">matmul</span>(beta)</span>
+<span id="cb64-20"><a href="#cb64-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb64-21"><a href="#cb64-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Função de perda</span></span>
+<span id="cb64-22"><a href="#cb64-22" aria-hidden="true" tabindex="-1"></a>mse <span class="ot">&lt;-</span> <span class="cf">function</span>(beta) {</span>
+<span id="cb64-23"><a href="#cb64-23" aria-hidden="true" tabindex="-1"></a>  resid <span class="ot">&lt;-</span> X<span class="sc">$</span><span class="fu">matmul</span>(beta) <span class="sc">-</span> y</span>
+<span id="cb64-24"><a href="#cb64-24" aria-hidden="true" tabindex="-1"></a>  loss <span class="ot">&lt;-</span> resid<span class="sc">$</span><span class="fu">square</span>()<span class="sc">$</span><span class="fu">mean</span>()</span>
+<span id="cb64-25"><a href="#cb64-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(loss)</span>
+<span id="cb64-26"><a href="#cb64-26" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb64-27"><a href="#cb64-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-28"><a href="#cb64-28" aria-hidden="true" tabindex="-1"></a><span class="do">## parâmetros da otimização</span></span>
+<span id="cb64-29"><a href="#cb64-29" aria-hidden="true" tabindex="-1"></a>num_iterations <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb64-30"><a href="#cb64-30" aria-hidden="true" tabindex="-1"></a>lr <span class="ot">&lt;-</span> <span class="fl">0.001</span> <span class="co"># learning rate, alpha</span></span>
+<span id="cb64-31"><a href="#cb64-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-32"><a href="#cb64-32" aria-hidden="true" tabindex="-1"></a><span class="do">## parâmetros do modelo</span></span>
+<span id="cb64-33"><a href="#cb64-33" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="fu">torch_rand</span>(<span class="fu">ncol</span>(dat), <span class="at">requires_grad =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb64-34"><a href="#cb64-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-35"><a href="#cb64-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Calcula para um caso simples</span></span>
+<span id="cb64-36"><a href="#cb64-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-37"><a href="#cb64-37" aria-hidden="true" tabindex="-1"></a>vl_loss <span class="ot">&lt;-</span> <span class="fu">mse</span>(beta)</span>
+<span id="cb64-38"><a href="#cb64-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-39"><a href="#cb64-39" aria-hidden="true" tabindex="-1"></a>vl_loss<span class="sc">$</span><span class="fu">backward</span>()</span>
+<span id="cb64-40"><a href="#cb64-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-41"><a href="#cb64-41" aria-hidden="true" tabindex="-1"></a>beta<span class="sc">$</span>grad</span>
+<span id="cb64-42"><a href="#cb64-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-43"><a href="#cb64-43" aria-hidden="true" tabindex="-1"></a>beta<span class="sc">$</span><span class="fu">sub_</span>(lr <span class="sc">*</span> beta<span class="sc">$</span>grad)</span>
+<span id="cb64-44"><a href="#cb64-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Substitui por zero</span></span>
+<span id="cb64-45"><a href="#cb64-45" aria-hidden="true" tabindex="-1"></a>beta<span class="sc">$</span>grad<span class="sc">$</span><span class="fu">zero_</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="compreensão-de-otimizadores" class="level3">
+<h3 class="anchored" data-anchor-id="compreensão-de-otimizadores">7 Compreensão de Otimizadores</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Exercício Teórico 7: Compreensão de Otimizadores</span></span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Pergunta: Explique a diferença entre a descida de gradiente simples e</span></span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a><span class="co"># métodos de otimização como L-BFGS ou Adam.</span></span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Em que situações um pode ser preferível ao outro?</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>O otimizador de gradient descent (GD) ou stochastic gradient descent (SGD) utiliza a informação do gradiente para encontrar o caminho de maior decaimento de uma função. Ele é utilizado para encontrar o valor do parâmetro que minimiza uma dada função.</p>
+<p>Seja <span class="math inline">\(f(x)\)</span> uma função real contínua com primeira derivada contínua. Temos o problema de escolher <span class="math inline">\(\beta\)</span> de tal modo a minimizar <span class="math inline">\(f(x)\)</span> . Então <span class="math inline">\(\nabla_{\beta}\)</span> é o gradiente de <span class="math inline">\(f(x)\)</span> em relação ao parâmetro e indica o caminho de maior crescimento da função. O algoritmo de SGD atualiza o parâmetro <span class="math inline">\(\beta^{k}\)</span> a cada iteração k, onde <span class="math inline">\(\beta^{0}\)</span> é dado, da seguinte maneira:</p>
+<p><span class="math display">\[
+\beta^{k+1} = \beta_{k} - \gamma\nabla_{\beta}^{k}
+\]</span></p>
+<p>onde <span class="math inline">\(\gamma\)</span> é um número real não-negativo, tipicamente próximo de 0.01, chamado “learning rate”. Quanto maior for o valor de <span class="math inline">\(\gamma\)</span> maiores serão os “passos” no processo de atualização; inversamente, quanto menor for o valor de <span class="math inline">\(\gamma\)</span> menores serão os “passos”no processo iterativo.</p>
+<p>O método L-BFGS ajusta usa a informação da hessiana, em conjunto com o gradiente, para atualizar o valor do parâmetro.</p>
+<p>Já o método Adam é uma sofisticação construída em cima do SGD. O Adam combina “momentum” com learning-rates individualizadas por parâmetros.</p>
+</section>
 </section>
 <section id="lista-3" class="level1">
 <h1>Lista 3</h1>
+<section id="criação-de-dataset-e-dataloader" class="level3">
+<h3 class="anchored" data-anchor-id="criação-de-dataset-e-dataloader">1 Criação de Dataset e DataLoader</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Exercício 1: Criação de Dataset e DataLoader</span></span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Crie um dataset utilizando o conjunto de dados &#39;mtcars&#39; e</span></span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a><span class="co"># defina um DataLoader com um tamanho de batch de 4.</span></span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Bibliotecas necessárias</span></span>
+<span id="cb66-6"><a href="#cb66-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(torch)</span>
+<span id="cb66-7"><a href="#cb66-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(torchvision)</span>
+<span id="cb66-8"><a href="#cb66-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-9"><a href="#cb66-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Conjunto de dados &#39;cars_scale&#39;</span></span>
+<span id="cb66-10"><a href="#cb66-10" aria-hidden="true" tabindex="-1"></a>mtcars_scale <span class="ot">&lt;-</span> <span class="fu">scale</span>(mtcars)</span>
+<span id="cb66-11"><a href="#cb66-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-12"><a href="#cb66-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Criação do Dataset e DataLoader</span></span>
+<span id="cb66-13"><a href="#cb66-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Substitua os &quot;##&quot; com o código correto.</span></span>
+<span id="cb66-14"><a href="#cb66-14" aria-hidden="true" tabindex="-1"></a>ds_mtcars <span class="ot">&lt;-</span> <span class="do">##(mtcars_scale)</span></span>
+<span id="cb66-15"><a href="#cb66-15" aria-hidden="true" tabindex="-1"></a>dl_mtcars <span class="ot">&lt;-</span> <span class="do">##(ds_mtcars, batch_size = 10)</span></span>
+<span id="cb66-16"><a href="#cb66-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-17"><a href="#cb66-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Verifique o tamanho do seu dataset e dataloader</span></span>
+<span id="cb66-18"><a href="#cb66-18" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">length</span>(ds_cars))</span>
+<span id="cb66-19"><a href="#cb66-19" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">length</span>(dl_cars))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Conjunto de dados &#39;cars_scale&#39;</span></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>mtcars_scale <span class="ot">&lt;-</span> <span class="fu">scale</span>(mtcars)</span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Criação do Dataset e DataLoader</span></span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Substitua os &quot;##&quot; com o código correto.</span></span>
+<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> mtcars_scale[, <span class="dv">1</span>]</span>
+<span id="cb67-8"><a href="#cb67-8" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> mtcars_scale[, <span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb67-9"><a href="#cb67-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-10"><a href="#cb67-10" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">torch_tensor</span>(y)</span>
+<span id="cb67-11"><a href="#cb67-11" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">torch_tensor</span>(x)</span>
+<span id="cb67-12"><a href="#cb67-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-13"><a href="#cb67-13" aria-hidden="true" tabindex="-1"></a>ds_mtcars <span class="ot">&lt;-</span> <span class="fu">tensor_dataset</span>(y, x)</span>
+<span id="cb67-14"><a href="#cb67-14" aria-hidden="true" tabindex="-1"></a>dl_mtcars <span class="ot">&lt;-</span> <span class="fu">dataloader</span>(ds_mtcars, <span class="at">batch_size =</span> <span class="dv">10</span>)</span>
+<span id="cb67-15"><a href="#cb67-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-16"><a href="#cb67-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Verifique o tamanho do seu dataset e dataloader</span></span>
+<span id="cb67-17"><a href="#cb67-17" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">length</span>(ds_mtcars))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 32</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">length</span>(dl_mtcars))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+</div>
+</section>
 </section>
 <section id="lista-4" class="level1">
 <h1>Lista 4</h1>

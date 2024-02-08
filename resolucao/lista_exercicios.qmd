@@ -17,6 +17,7 @@ library(torch)
 library(zeallot)
 library(luz)
 library(torchvision)
+library(dplyr)
 ```
 
 # Lista 1
@@ -401,6 +402,7 @@ onde $\alpha$ é uma constante pequena (em geral, 0.001) chamada "learning rate"
 ```
 
 ```{r}
+#| eval: false
 dat <- mtcars |>
   select(mpg, wt, qsec, am) |>
   mutate(across(everything(), ~as.numeric(scale(.x))))
@@ -448,7 +450,76 @@ beta$sub_(lr * beta$grad)
 beta$grad$zero_()
 ```
 
+### 7 Compreensão de Otimizadores
+
+```{r}
+# Exercício Teórico 7: Compreensão de Otimizadores
+# Pergunta: Explique a diferença entre a descida de gradiente simples e
+# métodos de otimização como L-BFGS ou Adam.
+# Em que situações um pode ser preferível ao outro?
+```
+
+O otimizador de gradient descent (GD) ou stochastic gradient descent (SGD) utiliza a informação do gradiente para encontrar o caminho de maior decaimento de uma função. Ele é utilizado para encontrar o valor do parâmetro que minimiza uma dada função.
+
+Seja $f(x)$ uma função real contínua com primeira derivada contínua. Temos o problema de escolher $\beta$ de tal modo a minimizar $f(x)$ . Então $\nabla_{\beta}$ é o gradiente de $f(x)$ em relação ao parâmetro e indica o caminho de maior crescimento da função. O algoritmo de SGD atualiza o parâmetro $\beta^{k}$ a cada iteração k, onde $\beta^{0}$ é dado, da seguinte maneira:
+
+$$
+\beta^{k+1} = \beta_{k} - \gamma\nabla_{\beta}^{k}
+$$
+
+onde $\gamma$ é um número real não-negativo, tipicamente próximo de 0.01, chamado "learning rate". Quanto maior for o valor de $\gamma$ maiores serão os "passos" no processo de atualização; inversamente, quanto menor for o valor de $\gamma$ menores serão os "passos"no processo iterativo.
+
+O método L-BFGS ajusta usa a informação da hessiana, em conjunto com o gradiente, para atualizar o valor do parâmetro.
+
+Já o método Adam é uma sofisticação construída em cima do SGD. O Adam combina "momentum" com learning-rates individualizadas por parâmetros.
+
 # Lista 3
+
+### 1 Criação de Dataset e DataLoader
+
+```{r}
+#| eval: false
+# Exercício 1: Criação de Dataset e DataLoader
+# Crie um dataset utilizando o conjunto de dados 'mtcars' e
+# defina um DataLoader com um tamanho de batch de 4.
+
+# Bibliotecas necessárias
+library(torch)
+library(torchvision)
+
+# Conjunto de dados 'cars_scale'
+mtcars_scale <- scale(mtcars)
+
+# Criação do Dataset e DataLoader
+# Substitua os "##" com o código correto.
+ds_mtcars <- ##(mtcars_scale)
+dl_mtcars <- ##(ds_mtcars, batch_size = 10)
+
+# Verifique o tamanho do seu dataset e dataloader
+print(length(ds_cars))
+print(length(dl_cars))
+```
+
+```{r}
+# Conjunto de dados 'cars_scale'
+mtcars_scale <- scale(mtcars)
+
+# Criação do Dataset e DataLoader
+# Substitua os "##" com o código correto.
+
+y <- mtcars_scale[, 1]
+x <- mtcars_scale[, -1]
+
+y <- torch_tensor(y)
+x <- torch_tensor(x)
+
+ds_mtcars <- tensor_dataset(y, x)
+dl_mtcars <- dataloader(ds_mtcars, batch_size = 10)
+
+# Verifique o tamanho do seu dataset e dataloader
+print(length(ds_mtcars))
+print(length(dl_mtcars))
+```
 
 # Lista 4
 
